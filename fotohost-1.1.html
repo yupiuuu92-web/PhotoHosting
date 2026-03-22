@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Catbox@Nurdeveloper</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: #1e1e1e; padding: 30px; border-radius: 12px; width: 350px; text-align: center; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .upload-area { border: 2px dashed #444; padding: 40px 20px; border-radius: 10px; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
+        .upload-area:hover { border-color: #00b4d8; background: #252525; }
+        .loader { display: none; border: 3px solid #333; border-top: 3px solid #00b4d8; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 10px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        input[type="text"] { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #444; color: #00b4d8; border-radius: 5px; box-sizing: border-box; font-family: monospace; font-size: 14px; margin-top: 10px; }
+        .hidden { display: none; }
+        
+    
+        footer { margin-top: 25px; padding-top: 15px; border-top: 1px solid #333; font-size: 11px; color: #666; line-height: 1.4; }
+        footer a { color: #888; text-decoration: none; border-bottom: 1px solid #444; transition: 0.2s; }
+        footer a:hover { color: #00b4d8; border-bottom-color: #00b4d8; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h3>Удобный Фото|Хостинг</h3>
+    
+    <div class="upload-area" id="dropZone">
+        <span id="label">Выбрать или перетащить фото</span>
+        <div class="loader" id="loader"></div>
+    </div>
+
+    <input type="file" id="fileInput" class="hidden" accept="image/*">
+    
+    <div id="result" class="hidden">
+        <p style="font-size: 13px; margin-bottom: 5px;">тестовая версия 1.1 :</p>
+        <input type="text" id="urlUrl" readonly onclick="this.select();">
+    </div>
+
+    <footer>
+      А теперь серьезно - Загружая файлы, ТЫ соглашаешся с <br> 
+        <a href="https://catbox.moe/faq.php" target="_blank" rel="noopener noreferrer">Политикой использования и конфиденциальности Catbox</a>. <br>
+        Не загружай запрещенный правилами контент.
+    </footer>
+</div>
+
+<script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const loader = document.getElementById('loader');
+    const label = document.getElementById('label');
+    const result = document.getElementById('result');
+    const urlUrl = document.getElementById('urlUrl');
+
+    dropZone.onclick = () => fileInput.click();
+
+    // Поддержка Drag-and-Drop
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#00b4d8'; });
+    dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = '#444'; });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#444';
+        if (e.dataTransfer.files[0]) uploadToCatbox(e.dataTransfer.files[0]);
+    });
+
+    fileInput.onchange = (e) => {
+        if (e.target.files[0]) uploadToCatbox(e.target.files[0]);
+    };
+
+    async function uploadToCatbox(file) {
+        label.classList.add('hidden');
+        loader.style.display = 'block';
+        result.classList.add('hidden');
+
+        const formData = new FormData();
+        formData.append('reqtype', 'fileupload');
+        formData.append('fileToUpload', file);
+
+        try {
+            // Используем бесплатный прокси для обхода CORS ограничений браузера
+            const proxy = 'https://corsproxy.io/?'; 
+            const target = 'https://catbox.moe/user/api.php';
+
+            const response = await fetch(proxy + encodeURIComponent(target), {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const link = await response.text();
+                const cleanLink = link.trim();
+                urlUrl.value = cleanLink;
+                result.classList.remove('hidden');
+                
+                // Автоматическое копирование в буфер
+                urlUrl.select();
+                navigator.clipboard.writeText(cleanLink);
+            } else {
+                alert('Ошибка сервера Catbox');
+            }
+        } catch (err) {
+            alert('Ошибка сети. Прокси-сервер может быть временно недоступен.');
+            console.error(err);
+        } finally {
+            loader.style.display = 'none';
+            label.classList.remove('hidden');
+        }
+    }
+</script>
+
+</body>
+</html>
