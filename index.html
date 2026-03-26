@@ -2,48 +2,118 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Catbox@Nurdeveloper</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: #1e1e1e; padding: 30px; border-radius: 12px; width: 350px; text-align: center; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .upload-area { border: 2px dashed #444; padding: 40px 20px; border-radius: 10px; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
-        .upload-area:hover { border-color: #00b4d8; background: #252525; }
-        .loader { display: none; border: 3px solid #333; border-top: 3px solid #00b4d8; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 10px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        input[type="text"] { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #444; color: #00b4d8; border-radius: 5px; box-sizing: border-box; font-family: monospace; font-size: 14px; margin-top: 10px; }
-        .hidden { display: none; }
-        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Black Hosting</title>
     
-        footer { margin-top: 25px; padding-top: 15px; border-top: 1px solid #333; font-size: 11px; color: #666; line-height: 1.4; }
-        footer a { color: #888; text-decoration: none; border-bottom: 1px solid #444; transition: 0.2s; }
-        footer a:hover { color: #00b4d8; border-bottom-color: #00b4d8; }
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121212">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <style>
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: #121212; 
+            color: #e0e0e0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            overflow: hidden;
+        }
+        .box { 
+            background: #1e1e1e; 
+            padding: 30px; 
+            border-radius: 16px; 
+            width: 90%; 
+            max-width: 350px; 
+            text-align: center; 
+            border: 1px solid #333; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7); 
+        }
+        h3 { color: #00b4d8; margin-top: 0; font-weight: 500; }
+        .upload-area { 
+            border: 2px dashed #444; 
+            padding: 50px 20px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            margin-bottom: 20px; 
+            transition: all 0.3s ease; 
+        }
+        .upload-area:active { transform: scale(0.98); }
+        .upload-area:hover { border-color: #00b4d8; background: #252525; }
+        
+        .loader { 
+            display: none; 
+            border: 3px solid #333; 
+            border-top: 3px solid #00b4d8; 
+            border-radius: 50%; 
+            width: 24px; 
+            height: 24px; 
+            animation: spin 1s linear infinite; 
+            margin: 0 auto; 
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        input[type="text"] { 
+            width: 100%; 
+            padding: 14px; 
+            background: #2a2a2a; 
+            border: 1px solid #444; 
+            color: #00b4d8; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-family: monospace; 
+            font-size: 14px; 
+            margin-top: 10px; 
+            outline: none;
+        }
+        .hidden { display: none !important; }
+        
+        footer { 
+            margin-top: 25px; 
+            padding-top: 15px; 
+            border-top: 1px solid #333; 
+            font-size: 11px; 
+            color: #666; 
+            line-height: 1.5; 
+        }
+        footer a { color: #00b4d8; text-decoration: none; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h3>Удобный Фото|Хостинг</h3>
+    <h3>Black Hosting</h3>
     
     <div class="upload-area" id="dropZone">
-        <span id="label">Выбрать или перетащить фото</span>
+        <span id="label">Нажмите для выбора фото</span>
         <div class="loader" id="loader"></div>
     </div>
 
     <input type="file" id="fileInput" class="hidden" accept="image/*">
     
     <div id="result" class="hidden">
-        <p style="font-size: 13px; margin-bottom: 5px;">тестовая версия 1.1 :</p>
+        <p style="font-size: 13px; margin-bottom: 5px; color: #888;">Ссылка скопирована:</p>
         <input type="text" id="urlUrl" readonly onclick="this.select();">
     </div>
 
     <footer>
-      А теперь серьезно - Загружая файлы, ТЫ соглашаешся с <br> 
-        <a href="https://catbox.moe/faq.php" target="_blank" rel="noopener noreferrer">Политикой использования и конфиденциальности Catbox</a>. <br>
-        Не загружай запрещенный правилами контент.
+        Загружая файлы, вы соглашаетесь с <br> 
+        <a href="https://catbox.moe/faq.php" target="_blank">правилами Catbox</a>. <br>
+        <span style="opacity: 0.5;">v1.1 | Hosting by Aziz_Gromov</span>
     </footer>
 </div>
 
 <script>
+    // Регистрация Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+        });
+    }
+
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
     const loader = document.getElementById('loader');
@@ -52,15 +122,6 @@
     const urlUrl = document.getElementById('urlUrl');
 
     dropZone.onclick = () => fileInput.click();
-
-    // Поддержка Drag-and-Drop
-    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#00b4d8'; });
-    dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = '#444'; });
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = '#444';
-        if (e.dataTransfer.files[0]) uploadToCatbox(e.dataTransfer.files[0]);
-    });
 
     fileInput.onchange = (e) => {
         if (e.target.files[0]) uploadToCatbox(e.target.files[0]);
@@ -76,7 +137,6 @@
         formData.append('fileToUpload', file);
 
         try {
-            // Используем бесплатный прокси для обхода CORS ограничений браузера
             const proxy = 'https://corsproxy.io/?'; 
             const target = 'https://catbox.moe/user/api.php';
 
@@ -91,14 +151,13 @@
                 urlUrl.value = cleanLink;
                 result.classList.remove('hidden');
                 
-                // Автоматическое копирование в буфер
                 urlUrl.select();
                 navigator.clipboard.writeText(cleanLink);
             } else {
-                alert('Ошибка сервера Catbox');
+                alert('Ошибка сервера');
             }
         } catch (err) {
-            alert('Ошибка сети. Прокси-сервер может быть временно недоступен.');
+            alert('Ошибка сети');
             console.error(err);
         } finally {
             loader.style.display = 'none';
