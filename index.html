@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Black Hosting</title>
+    <title>PhotoHost</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
@@ -85,10 +85,10 @@
 <body>
 
 <div class="box">
-    <h3>Black Hosting</h3>
+    <h3>Photo Hosting</h3>
     
     <div class="upload-area" id="dropZone">
-        <span id="label">Нажмите для выбора фото</span>
+        <span id="label">Нажмите для выбора фото или файла</span>
         <div class="loader" id="loader"></div>
     </div>
 
@@ -157,7 +157,7 @@
                 alert('Ошибка сервера');
             }
         } catch (err) {
-            alert('Ошибка сети');
+            alert('Ошибк сети');
             console.error(err);
         } finally {
             loader.style.display = 'none';
