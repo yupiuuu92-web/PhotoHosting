@@ -1,0 +1,17 @@
+{
+  "name": "Photo Hosting",
+  "short_name": "PhotoHost",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00e5ff",
+  "description": "Бесплатный удобный фото и файло хостинг",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
