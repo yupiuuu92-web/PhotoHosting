@@ -101,13 +101,12 @@
 
     <footer>
         Загружая файлы, вы соглашаетесь с <br> 
-        <a href="https://catbox.moe/faq.php" target="_blank">правилами Catbox</a>. <br>
-        <span style="opacity: 0.5;">v1.1 | Hosting by Aziz_Gromov</span>
+        <a href="https://imgbb.com/tos" target="_blank">правилами ImgBB</a>. <br>
+        <span style="opacity: 0.5;">v1.2 | Hosting from Aziz_Gromov|Norilsk</span>
     </footer>
 </div>
 
 <script>
-    // Регистрация Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
@@ -121,43 +120,41 @@
     const result = document.getElementById('result');
     const urlUrl = document.getElementById('urlUrl');
 
+    const apiKey = 'd0d498d742931aed3626d5b32c081df3';
+
     dropZone.onclick = () => fileInput.click();
 
     fileInput.onchange = (e) => {
-        if (e.target.files[0]) uploadToCatbox(e.target.files[0]);
+        if (e.target.files[0]) uploadToImgBB(e.target.files[0]);
     };
 
-    async function uploadToCatbox(file) {
+    async function uploadToImgBB(file) {
         label.classList.add('hidden');
         loader.style.display = 'block';
         result.classList.add('hidden');
 
         const formData = new FormData();
-        formData.append('reqtype', 'fileupload');
-        formData.append('fileToUpload', file);
+        formData.append('image', file);
 
         try {
-            const proxy = 'https://corsproxy.io/?'; 
-            const target = 'https://catbox.moe/user/api.php';
-
-            const response = await fetch(proxy + encodeURIComponent(target), {
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
                 method: 'POST',
                 body: formData
             });
 
             if (response.ok) {
-                const link = await response.text();
-                const cleanLink = link.trim();
+                const data = await response.json();
+                const cleanLink = data.data.url;
                 urlUrl.value = cleanLink;
                 result.classList.remove('hidden');
                 
                 urlUrl.select();
                 navigator.clipboard.writeText(cleanLink);
             } else {
-                alert('Ошибка сервера');
+                alert('Ошибка сервера ImgBB');
             }
         } catch (err) {
-            alert('Ошибк сети');
+            alert('Ошибка сети');
             console.error(err);
         } finally {
             loader.style.display = 'none';
